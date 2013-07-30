@@ -1,0 +1,232 @@
+
+################################################################### keybinds ###
+
+set $mod Mod4
+set $dmenu "dmenu -f -i -fn 'DejaVu Sans-10' -l 20"
+set $term "konsole"
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+bindsym $mod+m exec i3-input -F "move workspace to output %s" -P "Move workspace to: "
+bindsym $mod+g exec i3-input -P "i3-msg: "
+
+# start a terminal
+bindsym $mod+Return exec $term
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# Media keys
+bindsym XF86AudioMute exec pavol mute
+bindsym XF86AudioRaiseVolume exec pavol plus
+bindsym XF86AudioLowerVolume exec pavol minus
+bindsym XF86AudioPlay exec mpc toggle
+
+# Startmenu
+bindsym $mod+space exec j4-dmenu-desktop --dmenu=$dmenu --term=$term
+
+# Window menu
+bindsym $mod+y exec quickswitch.py --dmenu=$dmenu
+
+# Jump to browser
+bindsym $mod+x exec quickswitch.py --regex=".*(Opera|Chrome|Firefox)"
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+odiaeresis focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+odiaeresis move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+b floating toggle
+
+bindsym $mod+z floating disable
+
+# change focus between tiling / floating windows
+#bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace "Music"
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace "Music"
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+############################################################### resize modes ###
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+	# These bindings trigger as soon as you enter the resize mode
+
+	# Pressing left will shrink the window’s width.
+	# Pressing right will grow the window’s width.
+	# Pressing up will shrink the window’s height.
+	# Pressing down will grow the window’s height.
+	bindsym j resize shrink width 5 px or 5 ppt
+	bindsym k resize grow height 5 px or 5 ppt
+	bindsym l resize shrink height 5 px or 5 ppt
+	bindsym odiaeresis resize grow width 5 px or 5 ppt
+
+	# same bindings, but for the arrow keys
+	bindsym Left resize shrink width 5 px or 5 ppt
+	bindsym Down resize grow height 5 px or 5 ppt
+	bindsym Up resize shrink height 5 px or 5 ppt
+	bindsym Right resize grow width 5 px or 5 ppt
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+mode "fineresize" {
+	bindsym j resize shrink width 1 px or 1 ppt
+	bindsym k resize grow height 1 px or 1 ppt
+	bindsym l resize shrink height 1 px or 1 ppt
+	bindsym odiaeresis resize grow width 1 px or 1 ppt
+	bindsym Left resize shrink width 1 px or 1 ppt
+	bindsym Down resize grow height 1 px or 1 ppt
+	bindsym Up resize shrink height 1 px or 1 ppt
+	bindsym Right resize grow width 1 px or 1 ppt
+
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+
+bindsym $mod+t mode "fineresize"
+
+######################################################### settings and i3bar ###
+
+# I personally feel that Droid Sans is a tad sharper than DejaVu Sans in these
+# small sizes, but the spacing is also a bit too narrow for my eyes
+#font pango:Droid Sans 10
+font pango:DejaVu Sans 10
+
+bar {
+	# Terminus beats the crap out of everything when it comes to monospace
+	font pango: Terminus 10
+
+	status_command i3pystatus
+
+	tray_output primary
+}
+
+hide_edge_borders both
+
+workspace_layout tabbed
+
+######################################################### for_window section ###
+
+for_window [class="Git-gui"] floating enable
+for_window [class="Guake"] floating enable
+for_window [class="Truecrypt"] floating enable
+
+for_window [title="Canon LiDE 100.*"] floating enable
+
+# Sadly steam doesn't utilize the instance attribute properly.
+# https://github.com/ValveSoftware/steam-for-linux/issues/1879
+# https://github.com/ValveSoftware/steam-for-linux/issues/1040
+for_window [class="Steam" title="Settings"] floating enable
+#Steam Library Folders
+#Select Sound Input
+#Select external screenshots folder
+#Set Taskbar Menu / Jumplist Preferences
+#…and many more
+
+# KDE stuff
+for_window [class="Dolphin" title="(Copying.*)|(Moving.*)|(Progress Dialog)"] floating enable
+for_window [title="Receiving file.*"] floating enable
+for_window [title="klipper"] floating enable border none
+
+# Open Logic Sniffer (crappy Java GUI frameworks!)
+for_window [title="OLS Capture settings"] floating enable
+for_window [title="Edit channel properties"] floating enable
+
+#for_window [class="msgcompose"] floating enable
+for_window [title="Write:.*" class="Thunderbird"] floating enable
+
+################################################################# scratchpad ###
+
+for_window [title="QMPDClient.*"] move scratchpad #to workspace "Music"
+for_window [title="Friends" class="Steam"] move scratchpad
+for_window [title=".*- Chat" class="Steam"] move scratchpad
+bindsym Menu scratchpad show
+
+# ISO_Level3_Shift = AltGr
+#bindsym ISO_Level3_Shift scratchpad show
+
+############################################################### exec section ###
+
+exec --no-startup-id nm-applet
+exec --no-startup-id kuiserver
+exec --no-startup-id kwalletd
+exec --no-startup-id kwalletmanager
+
+exec --no-startup-id python2 ~/Projekte/pyload/pyLoadCore.py
+exec --no-statup-id m
+exec --no-startup-id i3pystatus > ~/i3pystatus.log
+
+exec --no-startup-id qmpdclient
