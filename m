@@ -8,8 +8,8 @@ function set_background() {
     feh --bg-max /home/mabe/bjHS9Hc.jpg
 }
 
-case "$1" in
-    (dp)
+case "_$1" in
+    (_dp)
         if [[ $XRANDR_STATE -regex-match "DP2 connected" ]] then
             xrandr --output LVDS1 --off --output DP2 --auto --primary
             set_background
@@ -17,7 +17,7 @@ case "$1" in
             echo "DP2 is not connected."
         fi
     ;;
-    (vga)
+    (_vga)
         if [[ $XRANDR_STATE -regex-match "VGA1 connected" ]] then
             xrandr --output LVDS1 --auto --primary --output VGA1 --auto --left-of LVDS1
             set_background
@@ -26,8 +26,11 @@ case "$1" in
             echo "VGA1 is not connected."
         fi
     ;;
-    (lv)
+    (_lv)
         xrandr --output LVDS1 --auto --primary --output VGA1 --off --output DP2 --off
         set_background
+    ;;
+    (_)
+        echo $XRANDR_STATE
     ;;
 esac
