@@ -31,6 +31,7 @@ case "_$1" in
         set_background
     ;;
     (_)
+        set_background
         echo $XRANDR_STATE
     ;;
 esac
