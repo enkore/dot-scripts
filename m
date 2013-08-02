@@ -5,7 +5,9 @@ zmodload zsh/regex
 XRANDR_STATE=$(xrandr)
 
 function set_background() {
-    feh --bg-max /home/mabe/bjHS9Hc.jpg
+    [[ $(cat ~/.fehbg) -regex-match "BG\/(.*)'" ]] && CURRENT_BG=$match
+    BACKGROUND=$(ls -1 -d ~/Bilder/BG/* | grep -vF $CURRENT_BG | sort -R | head -n 1)
+    feh --bg-max $BACKGROUND
 }
 
 case "_$1" in
