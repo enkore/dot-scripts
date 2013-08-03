@@ -2,11 +2,16 @@
 
 zmodload zsh/regex
 
-# Volume change
-AMOUNT=5%
+# Volume change (percentage, decibels or integer value)
+AMOUNT=3dB
 
 # Maximum int volume (100 % = 2^16 = 65535)
+# 0 dB
 MAX_VOL=65535
+# -90 db = 2048
+# -80 dB = 3000 
+# -70 dB
+MIN_VOL=4300
 
 [[ $(pactl stat) -regex-match "Default Sink: (\S*)" ]] && SINK=$match[1]
 [[ ( $(pacmd dump) -regex-match "set-sink-mute $SINK (yes|no)" ) && $match[1] == "no" ]] && TOGGLE_MUTE="yes" || TOGGLE_MUTE="no"
@@ -14,14 +19,25 @@ MAX_VOL=65535
 
 case "$1" in
     (plus)
-        if [[ $CURRENT_VOL < $MAX_VOL ]] then
+        if [[ ( $CURRENT_VOL -lt $MAX_VOL ) && ( $CURRENT_VOL -ge $MIN_VOL ) ]] then
+            echo blar
             pactl set-sink-volume $SINK -- +$AMOUNT
         else
-            pactl set-sink-volume $SINK -- $MAX_VOL
+            if [[ $CURRENT_VOL -le $MIN_VOL ]] then
+                echo "blar2"
+                pactl set-sink-volume $SINK -- $MIN_VOL
+            else
+                echo "blar3"
+                pactl set-sink-volume $SINK -- $MAX_VOL
+            fi
         fi
     ;;
     (minus)
-        pactl set-sink-volume $SINK -- -$AMOUNT
+        if [[ $CURRENT_VOL -gt $MIN_VOL ]] then
+            pactl set-sink-volume $SINK -- -$AMOUNT
+        else
+            pactl set-sink-volume $SINK -- $MIN_VOL
+        fi
     ;;
     (mute)
         pactl set-sink-mute $SINK $TOGGLE_MUTE
