@@ -20,14 +20,11 @@ MIN_VOL=4300
 case "$1" in
     (plus)
         if [[ ( $CURRENT_VOL -lt $MAX_VOL ) && ( $CURRENT_VOL -ge $MIN_VOL ) ]] then
-            echo blar
             pactl set-sink-volume $SINK -- +$AMOUNT
         else
             if [[ $CURRENT_VOL -le $MIN_VOL ]] then
-                echo "blar2"
                 pactl set-sink-volume $SINK -- $MIN_VOL
             else
-                echo "blar3"
                 pactl set-sink-volume $SINK -- $MAX_VOL
             fi
         fi
