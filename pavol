@@ -10,30 +10,30 @@ AMOUNT=3dB
 MAX_VOL=65535
 # -90 db = 2048
 # -80 dB = 3000 
-# -70 dB
-MIN_VOL=4300
+# -70 dB = 4300
+MIN_VOL=1400
 
-[[ $(pactl stat) -regex-match "Default Sink: (\S*)" ]] && SINK=$match[1]
+[[ $(pactl info) -regex-match "Default Sink: (\S*)" ]] && SINK=$match[1]
 [[ ( $(pacmd dump) -regex-match "set-sink-mute $SINK (yes|no)" ) && $match[1] == "no" ]] && TOGGLE_MUTE="yes" || TOGGLE_MUTE="no"
 [[ $(pacmd dump) -regex-match "set-sink-volume $SINK (0x[a-z0-9]+)" ]] && CURRENT_VOL=$(( $match[1] ))
 
 case "$1" in
     (plus)
         if [[ ( $CURRENT_VOL -lt $MAX_VOL ) && ( $CURRENT_VOL -ge $MIN_VOL ) ]] then
-            pactl set-sink-volume $SINK -- +$AMOUNT
+            pactl set-sink-volume $SINK +$AMOUNT
         else
             if [[ $CURRENT_VOL -le $MIN_VOL ]] then
-                pactl set-sink-volume $SINK -- $MIN_VOL
+                pactl set-sink-volume $SINK $MIN_VOL
             else
-                pactl set-sink-volume $SINK -- $MAX_VOL
+                pactl set-sink-volume $SINK $MAX_VOL
             fi
         fi
     ;;
     (minus)
         if [[ $CURRENT_VOL -gt $MIN_VOL ]] then
-            pactl set-sink-volume $SINK -- -$AMOUNT
+            pactl set-sink-volume $SINK -$AMOUNT
         else
-            pactl set-sink-volume $SINK -- $MIN_VOL
+            pactl set-sink-volume $SINK $MIN_VOL
         fi
     ;;
     (mute)
