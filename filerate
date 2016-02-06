@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 # Approximate file growth over some seconds
 # w/ human friendly display
 # Patience points optional
